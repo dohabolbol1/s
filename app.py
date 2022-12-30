@@ -25,7 +25,7 @@ memcache = {}
 
 app = Flask(__name__, static_url_path='/static')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://doha:12345678@database-1.cwrbhkqwy2hu.us-east-1.rds.amazonaws.com/database-1?charset=utf8mb4'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://doha:12345678@database-1.cwrbhkqwy2hu.us-east-1.rds.amazonaws.com/cloud?charset=utf8mb4'
 db = SQLAlchemy(app)
 sess = Session()
 
@@ -46,7 +46,7 @@ class MemcacheConfig(db.Model):
 
 #Clear memcache_config table
 with app.app_context():
-    my_conn = pymysql.connect(host='database-1.cwrbhkqwy2hu.us-east-1.rds.amazonaws.com', user='doha', password='12345678', db='database-1')
+    my_conn = pymysql.connect(host='database-1.cwrbhkqwy2hu.us-east-1.rds.amazonaws.com', user='doha', password='12345678', db='cloud')
     my_conn.cursor().execute("DROP table IF EXISTS memcache_config")
     db.create_all()
     my_conn.cursor().execute('INSERT INTO memcache_config VALUES (%s, %s, %s, %s, %s, %s, %s)', (5000000, "Random", 0, 0, 0, 0, 0)) #Default values for memcache_config
@@ -83,12 +83,12 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def get_db_connection():
-    conn = sqlite3.connect(host='database-1.cwrbhkqwy2hu.us-east-1.rds.amazonaws.com', user='doha', password='12345678', db='database-1')
+    conn = sqlite3.connect(host='database-1.cwrbhkqwy2hu.us-east-1.rds.amazonaws.com', user='doha', password='12345678', db='cloud')
     conn.row_factory = sqlite3.Row
     return conn
 
 def get_mem_db_connection():
-    conn = sqlite3.connect(host='database-1.cwrbhkqwy2hu.us-east-1.rds.amazonaws.com', user='doha', password='12345678', db='database-1')
+    conn = sqlite3.connect(host='database-1.cwrbhkqwy2hu.us-east-1.rds.amazonaws.com', user='doha', password='12345678', db='cloud')
     conn.row_factory = sqlite3.Row
     return conn
 
